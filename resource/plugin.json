@@ -1,0 +1,35 @@
+﻿{
+    "name": "TheGamesDB-snowflake",
+    "type": "plugin_scraper",
+    "version": "1.0.0.0",
+    "authors": [
+        "Ronny Chan"
+    ],
+    "description": "Game Scraper for The Games DB",
+    "platforms": [
+        "ATARI_2600",
+        "ATARI_5200",
+        "ATARI_LYNX",
+        "NINTENDO_NES",
+        "NINTENDO_SNES",
+        "NINTENDO_N64",
+        "NINTENDO_GCN",
+        "NINTENDO_WII",
+        "NINTENDO_GB",
+        "NINTENDO_GBC",
+        "NINTENDO_GBA",
+        "NINTENDO_NDS",
+        "SONY_PSX",
+        "SONY_PS2",
+        "SONY_PSP",
+        "SEGA_SMS",
+        "SEGA_GEN",
+        "SEGA_MD",
+        "SEGA_CD",
+        "SEGA_32X",
+        "SEGA_SAT",
+        "SEGA_DC",
+        "SEGA_GG"
+    ],
+    "scraper_source": "http://thegamesdb.net/"
+}
