@@ -12,6 +12,7 @@ using Snowflake.Scraper;
 using System.ComponentModel.Composition;
 using Snowflake.Service;
 using Snowflake.Constants;
+using DuoVia.FuzzyStrings;
 namespace Scraper.TheGamesDB
 {
     public class TheGamesDB : BaseScraper
@@ -49,6 +50,7 @@ namespace Scraper.TheGamesDB
             var results = ParseSearchResults(searchUri);
             return results;
         }
+
         public override IList<IGameScrapeResult> GetSearchResults(string searchQuery, string platformId)
         {
             var searchUri = new Uri(Uri.EscapeUriString("http://thegamesdb.net/api/GetGamesList.php?name=" + searchQuery
@@ -56,6 +58,34 @@ namespace Scraper.TheGamesDB
             var results = ParseSearchResults(searchUri);
             return results;
         }
+        public override IList<IGameScrapeResult> GetSearchResults(IDictionary<string, string> identifiedMetadata, string platformId)
+        {
+            if(identifiedMetadata.ContainsKey("Identifier-CMPDats"))
+            {
+                return this.GetSearchResults(identifiedMetadata["Identifier-CMPDats"], platformId);
+            }
+            else
+            {
+                return this.GetSearchResults(identifiedMetadata.Values.First(), platformId);
+            }
+        }
+        public override IList<IGameScrapeResult> GetSearchResults(IDictionary<string, string> identifiedMetadata, string searchQuery, string platformId)
+        {
+            if (identifiedMetadata.ContainsKey("Identifier-CMPDats"))
+            {
+                return this.GetSearchResults(identifiedMetadata["Identifier-CMPDats"], platformId);
+            }
+            else
+            {
+                return this.GetSearchResults(searchQuery, platformId);
+            }
+        }
+        public override IList<IGameScrapeResult> SortBestResults(IDictionary<string, string> identifiedMetadata, IList<IGameScrapeResult> searchResults)
+        {
+            string gameName = identifiedMetadata["Identifier-CMPDats"];
+            return searchResults.OrderBy(result => result.GameTitle.LevenshteinDistance(gameName)).ToList();
+        }
+
         public override Tuple<IDictionary<string, string>, IGameImagesResult> GetGameDetails(string id)
         {
             var searchUri = new Uri(Uri.EscapeUriString("http://thegamesdb.net/api/GetGame.php?id=" + id));
