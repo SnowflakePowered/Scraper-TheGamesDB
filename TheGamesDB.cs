@@ -82,8 +82,7 @@ namespace Scraper.TheGamesDB
         }
         public override IList<IGameScrapeResult> SortBestResults(IDictionary<string, string> identifiedMetadata, IList<IGameScrapeResult> searchResults)
         {
-            string gameName = identifiedMetadata["Identifier-CMPDats"];
-            return searchResults.OrderBy(result => result.GameTitle.LevenshteinDistance(gameName)).ToList();
+                return searchResults.OrderBy(result => JaroWinklerDistance.distance(result.GameTitle, gameName)).ToList();
         }
 
         public override Tuple<IDictionary<string, string>, IGameImagesResult> GetGameDetails(string id)
