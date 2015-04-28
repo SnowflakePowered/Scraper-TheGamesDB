@@ -12,7 +12,7 @@ using Snowflake.Scraper;
 using System.ComponentModel.Composition;
 using Snowflake.Service;
 using Snowflake.Constants;
-using DuoVia.FuzzyStrings;
+using Snowflake.Identifier;
 namespace Scraper.TheGamesDB
 {
     public class TheGamesDB : BaseScraper
@@ -58,39 +58,64 @@ namespace Scraper.TheGamesDB
             var results = ParseSearchResults(searchUri);
             return results;
         }
-        public override IList<IGameScrapeResult> GetSearchResults(IDictionary<string, string> identifiedMetadata, string platformId)
+        public override IList<IGameScrapeResult> GetSearchResults(IList<IIdentifiedMetadata> identifiedMetadata, string platformId)
         {
-            if(identifiedMetadata.ContainsKey("Identifier-CMPDats"))
+            if (identifiedMetadata.Count > 0)
             {
-                return this.GetSearchResults(identifiedMetadata["Identifier-CMPDats"], platformId);
+                IIdentifiedMetadata gameTitle = identifiedMetadata.Where(metadata => metadata.ValueType == IdentifiedValueTypes.GameTitle).FirstOrDefault();
+                if (gameTitle != null)
+                {
+                    return this.GetSearchResults(gameTitle.Value, platformId);
+                }
+                else
+                {
+                    return this.GetSearchResults(identifiedMetadata.First().Value, platformId);
+                }
             }
             else
             {
-                return this.GetSearchResults(identifiedMetadata.Values.First(), platformId);
+                return this.GetSearchResults(String.Empty, platformId);
             }
         }
-        public override IList<IGameScrapeResult> GetSearchResults(IDictionary<string, string> identifiedMetadata, string searchQuery, string platformId)
+        public override IList<IGameScrapeResult> GetSearchResults(IList<IIdentifiedMetadata> identifiedMetadata, string searchQuery, string platformId)
         {
-            if (identifiedMetadata.ContainsKey("Identifier-CMPDats"))
+            if (identifiedMetadata.Count > 0)
             {
-                return this.GetSearchResults(identifiedMetadata["Identifier-CMPDats"], platformId);
+                IIdentifiedMetadata gameTitle = identifiedMetadata.Where(metadata => metadata.ValueType == IdentifiedValueTypes.GameTitle).FirstOrDefault();
+                if (gameTitle != null)
+                {
+                    return this.GetSearchResults(gameTitle.Value, platformId);
+                }
+                else
+                {
+                    return this.GetSearchResults(searchQuery, platformId);
+                }
             }
             else
             {
                 return this.GetSearchResults(searchQuery, platformId);
             }
+            
         }
-        public override IList<IGameScrapeResult> SortBestResults(IDictionary<string, string> identifiedMetadata, IList<IGameScrapeResult> searchResults)
+        public override IList<IGameScrapeResult> SortBestResults(IList<IIdentifiedMetadata> identifiedMetadata, IList<IGameScrapeResult> searchResults)
         {
-            string gameName = identifiedMetadata["Identifier-CMPDats"];
-            return searchResults.OrderBy(result => result.GameTitle.LevenshteinDistance(gameName)).ToList();
+            if (identifiedMetadata.Count > 0)
+            {
+                IIdentifiedMetadata gameTitle = identifiedMetadata.Where(metadata => metadata.ValueType == IdentifiedValueTypes.GameTitle).FirstOrDefault();
+                string gameName = gameTitle.Value;
+                return searchResults.OrderBy(result => JaroWinklerDistance.distance(result.GameTitle, gameName)).ToList();
+            }
+            else
+            {
+                return searchResults;
+            }
         }
 
         public override Tuple<IDictionary<string, string>, IGameImagesResult> GetGameDetails(string id)
         {
             var searchUri = new Uri(Uri.EscapeUriString("http://thegamesdb.net/api/GetGame.php?id=" + id));
             using (var client = new WebClient())
-            {
+            { 
                 string xml = client.DownloadString(searchUri);
                 XDocument xmlDoc = XDocument.Parse(xml);
                 string baseImageUrl = xmlDoc.Descendants("baseImgUrl").First().Value;
