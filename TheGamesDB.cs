@@ -8,11 +8,13 @@ using System.IO;
 using System.Reflection;
 using System.Net;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 using Snowflake.Scraper;
 using System.ComponentModel.Composition;
 using Snowflake.Service;
 using Snowflake.Constants;
 using Snowflake.Identifier;
+
 namespace Scraper.TheGamesDB
 {
     public class TheGamesDB : BaseScraper
@@ -103,14 +105,22 @@ namespace Scraper.TheGamesDB
             {
                 IIdentifiedMetadata gameTitle = identifiedMetadata.Where(metadata => metadata.ValueType == IdentifiedValueTypes.GameTitle).FirstOrDefault();
                 string gameName = gameTitle.Value;
-                return searchResults.OrderBy(result => JaroWinklerDistance.distance(result.GameTitle, gameName)).ToList();
+                return searchResults.OrderBy(result => LevenshteinDistance.Compute(TheGamesDB.StripString(result.GameTitle), TheGamesDB.StripString(gameName))).ToList();
             }
             else
             {
                 return searchResults;
             }
         }
-
+        /// <summary>
+        /// Removes spaces and punctuation from a string for Levenshtein comparison
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        internal static string StripString(string input)
+        {
+            return Regex.Replace(input, @"[^a-zA-Z0-9]", "");
+        }
         public override Tuple<IDictionary<string, string>, IGameImagesResult> GetGameDetails(string id)
         {
             var searchUri = new Uri(Uri.EscapeUriString("http://thegamesdb.net/api/GetGame.php?id=" + id));

@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JaroWinkler.cs" />
+    <Compile Include="LevenshteinDistance.cs" />
     <Compile Include="TheGamesDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
