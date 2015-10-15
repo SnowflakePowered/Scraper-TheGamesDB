@@ -60,14 +60,6 @@
       <HintPath>packages\SharpYaml.1.2.0\lib\SharpYaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Snowflake, Version=0.1.454.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Snowflake.0.1.454-pre-alpha-nightly\lib\net45\Snowflake.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Snowflake.API, Version=0.1.454.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Snowflake.API.0.1.454-pre-alpha-nightly\lib\net45\Snowflake.API.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -91,9 +83,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="api\ApiGame.cs" />
+    <Compile Include="api\ApiGamesDB.cs" />
+    <Compile Include="api\ApiGameSearchResult.cs" />
+    <Compile Include="api\ApiPlatform.cs" />
+    <Compile Include="api\ApiPlatformSearchResult.cs" />
     <Compile Include="JaroWinkler.cs" />
     <Compile Include="LevenshteinDistance.cs" />
-    <Compile Include="TheGamesDB.cs" />
+    <Compile Include="TheGamesDbScraper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -105,14 +102,22 @@
     <None Include="packages.config" />
     <EmbeddedResource Include="resource\plugin.json">
     </EmbeddedResource>
+    <EmbeddedResource Include="resource\snowball.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\snowflake-working\snowflake\Snowflake.API\Snowflake.API.csproj">
+      <Project>{2841aeea-03d5-47b0-9d90-375dfa19559a}</Project>
+      <Name>Snowflake.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\snowflake-working\snowflake\Snowflake\Snowflake.csproj">
+      <Project>{8f1d65ed-4a96-4a0a-8371-53655a60a2b3}</Project>
+      <Name>Snowflake</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

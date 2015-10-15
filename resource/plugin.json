@@ -31,5 +31,6 @@
         "SEGA_DC",
         "SEGA_GG"
     ],
-    "scraper_source": "http://thegamesdb.net/"
+    "scraper_source": "http://thegamesdb.net/",
+	"scraper_accuracy": "0.8"
 }
