@@ -1,4 +1,6 @@
 bin/
 obj/
 packages/
-Scraper.TheGamesDB.v12.suo
+.vs/
+packages/
+*.dll
