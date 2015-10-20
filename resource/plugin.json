@@ -1,9 +1,9 @@
 ﻿{
-    "name": "TheGamesDB-snowflake",
+    "name": "TheGamesDB-Scraper",
     "type": "plugin_scraper",
     "version": "1.0.0.0",
     "authors": [
-        "Ronny Chan"
+        "Snowflake"
     ],
     "description": "Game Scraper for The Games DB",
     "platforms": [
@@ -31,5 +31,6 @@
         "SEGA_DC",
         "SEGA_GG"
     ],
-    "scraper_source": "http://thegamesdb.net/"
+    "scraper_source": "http://thegamesdb.net/",
+	"scraper_accuracy": "0.8"
 }
