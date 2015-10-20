@@ -10,7 +10,6 @@ using System.Net;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using Snowflake.Scraper;
-using Snowflake.Romfile;
 using System.ComponentModel.Composition;
 using Snowflake.Service;
 using Snowflake.Constants;

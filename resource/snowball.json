@@ -1,1 +1,8 @@
-﻿
+﻿{
+  "name": "TheGamesDB-Scraper",
+  "description": "Game Data Scraper from http://thegamesdb.net.",
+  "version": "1.0.0",
+  "dependencies": [ ],
+  "packagetype": "Plugin",
+  "authors": [ "Snowflake", "Chainsawkitten" ]
+}
