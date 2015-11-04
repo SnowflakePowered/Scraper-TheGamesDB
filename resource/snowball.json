@@ -4,5 +4,6 @@
   "version": "1.0.0",
   "dependencies": [ ],
   "packagetype": "Plugin",
+  "tags": [ "~snowflakeDefault", "Scraper", "TheGamesDB"],
   "authors": [ "Snowflake", "Chainsawkitten" ]
 }
